@@ -14,10 +14,12 @@ import java.time.LocalDate;
 @Setter
 @Getter
 public class LoanDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    private Long id;
     private String type;
     private String status;
     private LocalDate signDate;
     private Integer monthToReturn;
+    private Double amount;
+    private String currencyCode;
 }

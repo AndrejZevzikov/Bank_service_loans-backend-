@@ -2,6 +2,8 @@ package com.final_project.loans.mapper;
 
 import com.final_project.loans.dto.LoanDto;
 import com.final_project.loans.model.Loan;
+import com.final_project.loans.service.DailyOperationService;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -9,8 +11,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-@NoArgsConstructor
+@AllArgsConstructor
 public class MapperDto {
+    private final DailyOperationService dailyOperationService;
 
     public LoanDto toLoanDto(Loan loan){
         return LoanDto.builder()
@@ -18,6 +21,9 @@ public class MapperDto {
                 .type(loan.getType().toString())
                 .monthToReturn(loan.getMonthToReturn())
                 .signDate(loan.getSignDate())
+                .id(loan.getId())
+                .amount(loan.getAmount())
+                .currencyCode(dailyOperationService.getCurrencyCode(loan.getCurrencyId()))
                 .build();
     }
 

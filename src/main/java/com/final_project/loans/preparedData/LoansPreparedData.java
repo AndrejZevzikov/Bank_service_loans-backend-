@@ -19,7 +19,7 @@ public class LoansPreparedData {
                 .currencyId(1L)
                 .customerIdentificationNumber("484646464676")
                 .description("Testing1")
-                .monthToReturn(20)
+                .monthToReturn(2)
                 .percentage(2.2)
                 .status(LoanStatus.ANSWERED)
                 .type(LoanType.LEASING)

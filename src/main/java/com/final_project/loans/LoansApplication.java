@@ -1,7 +1,11 @@
 package com.final_project.loans;
 
+import com.final_project.loans.model.LoanReturnSchedule;
+import com.final_project.loans.preparedData.LoanReturnSchedulePreparedData;
 import com.final_project.loans.preparedData.LoansPreparedData;
 import com.final_project.loans.repository.LoanRepository;
+import com.final_project.loans.repository.LoanReturnScheduleRepository;
+import com.final_project.loans.service.LoanReturnScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,8 +14,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.util.List;
+
 @SpringBootApplication
-@ComponentScan(basePackages = {"com/final_project/loans/*"})
 @EntityScan(basePackages = {"com/final_project/loans/*"})
 public class LoansApplication {
 
@@ -22,9 +27,16 @@ public class LoansApplication {
     }
 
     @Bean
-    public CommandLineRunner run(final LoanRepository loanRepository, @Autowired LoansPreparedData loansPreparedData) {
+    public CommandLineRunner run(final LoanRepository loanRepository, @Autowired LoansPreparedData loansPreparedData,
+                                 final LoanReturnScheduleRepository loanReturnScheduleRepository,
+                                 @Autowired LoanReturnSchedulePreparedData loanReturnSchedulePreparedData,
+                                 @Autowired LoanReturnScheduleService service) {
         return args -> {
             loanRepository.saveAll(loansPreparedData.setUpLoans());
+            List<LoanReturnSchedule> loanReturnSchedules = loanReturnSchedulePreparedData.setUpSchedule();
+            loanReturnSchedules.forEach(loanReturnSchedule -> loanReturnSchedule.setLoan(loanRepository.findById(1L).get()));
+            loanReturnScheduleRepository.saveAll(loanReturnSchedules);
+            service.getLoanReturnScheduleByLoanId(1L).forEach(loanReturnSchedule -> System.out.println(loanReturnSchedule.getPlanPayDate()));
         };
     }
 

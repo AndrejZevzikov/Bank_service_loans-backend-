@@ -6,6 +6,7 @@ import com.final_project.loans.mapper.MapperDto;
 import com.final_project.loans.service.DailyOperationService;
 import com.final_project.loans.service.LoanService;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,10 @@ public class LoanController {
         return ResponseEntity
                 .ok()
                 .body(mapperDto.toLoanDtoList(loanService.getFirstFiveLoans(token)));
+    }
 
+    @GetMapping("pdf/{id}")
+    public void getReturnLoanSchedulePdf(@PathVariable(name = "id")Long id){
 
     }
 }
