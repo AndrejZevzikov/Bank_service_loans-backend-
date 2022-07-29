@@ -11,4 +11,7 @@ public interface LoanReturnScheduleRepository extends JpaRepository<LoanReturnSc
 
     @Query(value = "SELECT * FROM loan_return_schedule r WHERE r.loan_id = :id",nativeQuery = true)
     List<LoanReturnSchedule> findLoanReturnScheduleByLoanId(@Param("id") Long id);
+
+    @Query(value = "SELECT * FROM loan_return_schedule r WHERE r.loan_id = :id AND r.left_to_pay > 0",nativeQuery = true)
+    List<LoanReturnSchedule> findUnpaidScheduleByLoanId(@Param("id") Long id);
 }

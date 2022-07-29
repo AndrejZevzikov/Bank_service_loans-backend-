@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.final_project.loans.enums.LoanStatus.ANSWERED;
+import static com.final_project.loans.enums.LoanStatus.DRAFT;
+import static com.final_project.loans.enums.LoanType.*;
+
 @Configuration
 public class LoansPreparedData {
 
@@ -21,8 +25,8 @@ public class LoansPreparedData {
                 .description("Testing1")
                 .monthToReturn(2)
                 .percentage(2.2)
-                .status(LoanStatus.ANSWERED)
-                .type(LoanType.LEASING)
+                .status(ANSWERED)
+                .type(LEASING)
                 .signDate(LocalDate.of(2022, 2, 12))
                 .build();
         Loan loan2 = Loan.builder()
@@ -32,8 +36,8 @@ public class LoansPreparedData {
                 .description("Testing2")
                 .monthToReturn(20)
                 .percentage(2.2)
-                .status(LoanStatus.ANSWERED)
-                .type(LoanType.CONSUMER_CREDIT)
+                .status(ANSWERED)
+                .type(CONSUMER_CREDIT)
                 .signDate(LocalDate.of(2022, 1, 12))
                 .build();
         Loan loan3 = Loan.builder()
@@ -43,8 +47,8 @@ public class LoansPreparedData {
                 .description("Testing3")
                 .monthToReturn(20)
                 .percentage(2.2)
-                .status(LoanStatus.DRAFT)
-                .type(LoanType.HOUSE_LOAN)
+                .status(DRAFT)
+                .type(HOUSE_LOAN)
                 .signDate(LocalDate.of(2022, 2, 8))
                 .build();
 

@@ -1,34 +1,31 @@
 package com.final_project.loans.service;
 
-import org.springframework.http.HttpStatus;
+import com.final_project.loans.dto.CustomerDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-public class DailyOperationService { //TODO pasilieku kaip pvz optimizuoti
+public class DailyOperationService {
 
-    public String getIdentityNumber(String token) {
-        WebClient client = WebClient.builder()
-                .baseUrl("http://localhost:8080/customer/get").build();
+    public static final String GET_CUSTOMER_API = "http://localhost:8080/customer/get";
+    public static final String GET_CURRENCY_CODE_BY_ID_API = "http://localhost:8080/currency/code/";
 
-        String body = client.get()
+    public CustomerDto getCustomerDto(String token) {
+        WebClient client = WebClient.builder().baseUrl(GET_CUSTOMER_API).build();
+        return client.get()
                 .header("Authorization", token)
                 .exchange()
                 .block()
-                .bodyToMono(String.class)
+                .bodyToMono(CustomerDto.class)
                 .block();
-        return body;
     }
 
     public String getCurrencyCode(Long id){
-        WebClient client = WebClient.builder()
-                .baseUrl("http://localhost:8080/currency/code/" + id).build();
-
-        String body = client.get()
+        WebClient client = WebClient.builder().baseUrl(GET_CURRENCY_CODE_BY_ID_API + id).build();
+        return client.get()
                 .exchange()
                 .block()
                 .bodyToMono(String.class)
                 .block();
-        return body;
     }
 }

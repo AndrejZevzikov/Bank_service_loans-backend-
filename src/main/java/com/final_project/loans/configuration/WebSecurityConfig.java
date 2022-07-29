@@ -30,8 +30,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Autowired
-    private DataSource dataSource;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -42,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeHttpRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers(HttpMethod.GET,"/loans").hasAnyAuthority("ADMIN","CLIENT")
+                .antMatchers(HttpMethod.GET,"/loans","/loans/pdf/**").hasAnyAuthority("ADMIN","CLIENT")
                 .anyRequest()
                 .authenticated()
                 .and()

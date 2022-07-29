@@ -12,7 +12,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class LoansApplication {
         return args -> {
             loanRepository.saveAll(loansPreparedData.setUpLoans());
             List<LoanReturnSchedule> loanReturnSchedules = loanReturnSchedulePreparedData.setUpSchedule();
-            loanReturnSchedules.forEach(loanReturnSchedule -> loanReturnSchedule.setLoan(loanRepository.findById(1L).get()));
+            loanReturnSchedules.forEach(loanReturnSchedule -> loanReturnSchedule.setLoan(loanRepository.findById(2L).get()));
             loanReturnScheduleRepository.saveAll(loanReturnSchedules);
             service.getLoanReturnScheduleByLoanId(1L).forEach(loanReturnSchedule -> System.out.println(loanReturnSchedule.getPlanPayDate()));
         };
