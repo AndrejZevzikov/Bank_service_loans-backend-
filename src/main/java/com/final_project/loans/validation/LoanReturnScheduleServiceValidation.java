@@ -13,10 +13,11 @@ import org.springframework.stereotype.Component;
 public class LoanReturnScheduleServiceValidation {
 
     public static final String CUSTOMER_DO_NOT_HAVE_ACCESS = "Customer %s do not have access to get loan with id %d ";
+    public static final String ADMIN = "ADMIN";
 
-    public void isUserHasAccess(CustomerDto customerDto, Loan loan) throws CustomerDoNotHaveAccessException {
+    public void isUserHasAccess(final CustomerDto customerDto, final Loan loan) throws CustomerDoNotHaveAccessException {
         if (!customerDto.getIdentificationNumber().equals(loan.getCustomerIdentificationNumber())
-                && !customerDto.getAuthority().equals("ADMIN")) {
+                && !customerDto.getAuthority().equals(ADMIN)) {
             throw new CustomerDoNotHaveAccessException(
                     String.format(CUSTOMER_DO_NOT_HAVE_ACCESS, customerDto.getUsername(), loan.getId()));
         }

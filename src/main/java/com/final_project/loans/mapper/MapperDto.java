@@ -4,7 +4,6 @@ import com.final_project.loans.dto.LoanDto;
 import com.final_project.loans.model.Loan;
 import com.final_project.loans.service.DailyOperationService;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.stream.Collectors;
 public class MapperDto {
     private final DailyOperationService dailyOperationService;
 
-    public LoanDto toLoanDto(Loan loan){
+    public LoanDto toLoanDto(final Loan loan){
         return LoanDto.builder()
                 .status(loan.getStatus().toString())
                 .type(loan.getType().toString())

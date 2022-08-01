@@ -19,7 +19,7 @@ public class PdfService {
     public static final String LOAN_RETURN_SCHEDULE_ABSOLUTE_PATH = "C:\\Users\\andre\\Desktop\\Final_Project\\Backend\\loans\\src\\main\\resources\\schedulePdf\\loan_%d.pdf";
     private final LoanReturnScheduleRepository loanReturnScheduleRepository;
 
-    public void generateLoanSchedulePdf(CustomerDto customer, Loan loan) throws FileNotFoundException, DocumentException {
+    public void generateLoanSchedulePdf(final CustomerDto customer,final Loan loan) throws FileNotFoundException, DocumentException {
         System.out.println("start creating file");
         List<LoanReturnSchedule> schedule = loanReturnScheduleRepository.findUnpaidScheduleByLoanId(loan.getId());
         Document document = new Document();

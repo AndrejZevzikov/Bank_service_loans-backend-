@@ -20,7 +20,7 @@ public class LoanServiceAdmin implements LoanService {
     private final JwtDecoder jwtDecoder;
 
     @Override
-    public List<Loan> getLastFiveLoans(String token) {
+    public List<Loan> getLastFiveLoans(final String token) {
         log.info("Admin {} getting last loans", jwtDecoder.getUsername(token));
         return loanRepository.findAll().stream()
                 .sorted(Comparator.comparing(Loan::getSignDate))

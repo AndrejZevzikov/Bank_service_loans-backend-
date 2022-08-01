@@ -13,7 +13,7 @@ public class LoanServiceFactory {
     private final LoanServiceAdmin adminLoanService;
     private final LoanServiceCustomer customerLoanService;
 
-    public LoanService getService(String role) throws Exception {
+    public LoanService getService(String role) throws Exception { //TODO atsikratyti
         if (role.equals("ADMIN")) return adminLoanService;
         if (role.equals("CLIENT")) return customerLoanService;
         throw new Exception("test");

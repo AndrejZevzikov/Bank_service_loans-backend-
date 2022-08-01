@@ -6,7 +6,6 @@ import com.final_project.loans.exception.NoSuchObjInDatabaseException;
 import com.final_project.loans.factory.LoanServiceFactory;
 import com.final_project.loans.helper.JwtDecoder;
 import com.final_project.loans.mapper.MapperDto;
-import com.final_project.loans.model.LoanReturnSchedule;
 import com.final_project.loans.service.LoanReturnScheduleService;
 import com.itextpdf.text.DocumentException;
 import lombok.AllArgsConstructor;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 @RestController
@@ -36,7 +36,7 @@ public class LoanController {
 
 
     @GetMapping
-    public ResponseEntity<List<LoanDto>> getLoans(@RequestHeader("Authorization") String token) throws Exception {
+    public ResponseEntity<List<LoanDto>> getLoans(@RequestHeader(AUTHORIZATION) String token) throws Exception {
         return ResponseEntity
                 .ok()
                 .body(mapperDto.toLoanDtoList(
@@ -44,7 +44,8 @@ public class LoanController {
     }
 
     @GetMapping("pdf/{id}")
-    public ResponseEntity<Resource> getReturnLoanSchedulePdf(@PathVariable(name = "id") Long id, @RequestHeader("Authorization") String token)
+    public ResponseEntity<Resource> getReturnLoanSchedulePdf(@PathVariable(name = "id") Long id,
+                                                             @RequestHeader(AUTHORIZATION) String token)
             throws IOException, NoSuchObjInDatabaseException, CustomerDoNotHaveAccessException, DocumentException {
         Resource resource = loanReturnScheduleService.getReturnSchedulePdf(id, token);
         HttpHeaders httpHeaders = new HttpHeaders();

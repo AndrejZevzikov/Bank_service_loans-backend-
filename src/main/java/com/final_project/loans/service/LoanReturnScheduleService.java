@@ -34,13 +34,13 @@ public class LoanReturnScheduleService {
     private final LoanRepository loanRepository;
     private final LoanReturnScheduleServiceValidation loanReturnScheduleServiceValidation;
 
-    public List<LoanReturnSchedule> getLoanReturnScheduleByLoanId(Long id) {
+    public List<LoanReturnSchedule> getLoanReturnScheduleByLoanId(final Long id) {
         return loanReturnScheduleRepository.findLoanReturnScheduleByLoanId(id).stream()
                 .filter(loanReturnSchedule -> loanReturnSchedule.getActualPayDate() == null)
                 .collect(Collectors.toList());
     }
 
-    public List<LoanReturnSchedule> generateScheduleForNewLoan(Loan loan) {
+    public List<LoanReturnSchedule> generateScheduleForNewLoan(final Loan loan) {
         Double amountToPay = loan.getAmount() * (loan.getPercentage() / 100 * 1) / loan.getMonthToReturn();
         List<LoanReturnSchedule> loanReturnScheduleList = new ArrayList<>();
         for (int i = 0; i < loan.getMonthToReturn(); i++) {
@@ -57,7 +57,8 @@ public class LoanReturnScheduleService {
         return loanReturnScheduleList;
     }
 
-    public Resource getReturnSchedulePdf(Long loanId, String token) throws IOException, NoSuchObjInDatabaseException, CustomerDoNotHaveAccessException, DocumentException {
+    public Resource getReturnSchedulePdf(final Long loanId, final String token)
+            throws IOException, NoSuchObjInDatabaseException, CustomerDoNotHaveAccessException, DocumentException {
         CustomerDto customer = dailyOperationService.getCustomerDto(token);
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new NoSuchObjInDatabaseException(String.format(LOAN_NOT_FOUND, loanId)));
