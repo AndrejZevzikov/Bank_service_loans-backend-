@@ -44,7 +44,8 @@ public class LoanController {
     }
 
     @GetMapping("pdf/{id}")
-    public ResponseEntity<Resource> getReturnLoanSchedulePdf(@PathVariable(name = "id") Long id,@RequestHeader("Authorization") String token) throws IOException, NoSuchObjInDatabaseException, CustomerDoNotHaveAccessException, DocumentException {
+    public ResponseEntity<Resource> getReturnLoanSchedulePdf(@PathVariable(name = "id") Long id, @RequestHeader("Authorization") String token)
+            throws IOException, NoSuchObjInDatabaseException, CustomerDoNotHaveAccessException, DocumentException {
         Resource resource = loanReturnScheduleService.getReturnSchedulePdf(id, token);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(CONTENT_DISPOSITION, "attachment;File-Name=" + resource.getFilename());
@@ -52,7 +53,5 @@ public class LoanController {
                 .contentType(MediaType.parseMediaType(Files.probeContentType(resource.getFile().toPath())))
                 .headers(httpHeaders)
                 .body(resource);
-
-
     }
 }
