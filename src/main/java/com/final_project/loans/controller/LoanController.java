@@ -1,12 +1,14 @@
 package com.final_project.loans.controller;
 
 import com.final_project.loans.dto.LoanDto;
+import com.final_project.loans.enums.LoanStatus;
+import com.final_project.loans.enums.LoanType;
 import com.final_project.loans.exception.CustomerDoNotHaveAccessException;
+import com.final_project.loans.exception.InvalidLoanStatusException;
 import com.final_project.loans.exception.NoSuchObjInDatabaseException;
-import com.final_project.loans.factory.LoanServiceFactory;
-import com.final_project.loans.helper.JwtDecoder;
 import com.final_project.loans.mapper.MapperDto;
 import com.final_project.loans.service.LoanReturnScheduleService;
+import com.final_project.loans.service.LoanService;
 import com.itextpdf.text.DocumentException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,18 +31,23 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 @AllArgsConstructor
 @Slf4j
 public class LoanController {
-    private final LoanServiceFactory loanServiceFactory;
+    private final LoanService loanService;
     private final MapperDto mapperDto;
-    private final JwtDecoder jwtDecoder;
     private final LoanReturnScheduleService loanReturnScheduleService;
 
 
     @GetMapping
-    public ResponseEntity<List<LoanDto>> getLoans(@RequestHeader(AUTHORIZATION) String token) throws Exception {
+    public ResponseEntity<List<LoanDto>> getLoans(@RequestHeader(AUTHORIZATION) String token) {
         return ResponseEntity
                 .ok()
-                .body(mapperDto.toLoanDtoList(
-                        loanServiceFactory.getService(jwtDecoder.getRole(token)).getLastFiveLoans(token)));
+                .body(mapperDto.toLoanDtoList(loanService.getLastFiveLoans(token)));
+
+    }
+
+    @GetMapping("/id/{id}")
+    ResponseEntity<LoanDto> getLoanById(@PathVariable(name = "id") Long id) throws NoSuchObjInDatabaseException {
+        return ResponseEntity.ok()
+                .body(mapperDto.toLoanDto(loanService.getLoanById(id)));
     }
 
     @GetMapping("pdf/{id}")
@@ -54,5 +61,24 @@ public class LoanController {
                 .contentType(MediaType.parseMediaType(Files.probeContentType(resource.getFile().toPath())))
                 .headers(httpHeaders)
                 .body(resource);
+    }
+
+    @GetMapping("/types")
+    public ResponseEntity<List<LoanType>> getTypes() {
+        return ResponseEntity.ok().body(loanService.getTypes());
+    }
+
+    @GetMapping("/statuses")
+    public ResponseEntity<List<LoanStatus>> getStatuses() {
+        return ResponseEntity.ok().body(loanService.getStatuses());
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<LoanDto> editLoanStatus(@RequestHeader(AUTHORIZATION) String token,
+                                                  @RequestBody LoanDto loanDto)
+            throws NoSuchObjInDatabaseException, CustomerDoNotHaveAccessException, InvalidLoanStatusException {
+        System.out.println(loanDto);
+        return ResponseEntity.ok()
+                .body(mapperDto.toLoanDto(loanService.editLoan(loanDto, token)));
     }
 }

@@ -16,13 +16,14 @@ public class MapperDto {
 
     public LoanDto toLoanDto(final Loan loan){
         return LoanDto.builder()
-                .status(loan.getStatus().toString())
-                .type(loan.getType().toString())
+                .status(loan.getStatus())
+                .type(loan.getType())
                 .monthToReturn(loan.getMonthToReturn())
                 .signDate(loan.getSignDate())
                 .id(loan.getId())
                 .amount(loan.getAmount())
                 .currencyCode(dailyOperationService.getCurrencyCode(loan.getCurrencyId()))
+                .percentage(loan.getPercentage())
                 .build();
     }
 

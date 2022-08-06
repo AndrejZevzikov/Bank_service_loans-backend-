@@ -10,6 +10,7 @@ import com.final_project.loans.repository.LoanReturnScheduleRepository;
 import com.final_project.loans.validation.LoanReturnScheduleServiceValidation;
 import com.itextpdf.text.DocumentException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import static java.nio.file.Paths.get;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class LoanReturnScheduleService {
     public static final String LOAN_NOT_FOUND = "Loan with id %d does not exist";
     public static final String LOAN_SCHEDULE_ABSOLUTE_PATH =
@@ -41,15 +43,16 @@ public class LoanReturnScheduleService {
     }
 
     public List<LoanReturnSchedule> generateScheduleForNewLoan(final Loan loan) {
+        log.info("Generating return schedule for loan with id {}",loan.getId());
         Double amountToPay = loan.getAmount() * (loan.getPercentage() / 100 * 1) / loan.getMonthToReturn();
         List<LoanReturnSchedule> loanReturnScheduleList = new ArrayList<>();
         for (int i = 0; i < loan.getMonthToReturn(); i++) {
             loanReturnScheduleList.add(
                     LoanReturnSchedule.builder()
-                            .leftToPay(amountToPay)
+                            .leftToPay(round(amountToPay))
                             .loan(loan)
                             .currencyId(loan.getCurrencyId())
-                            .amountToPay(amountToPay)
+                            .amountToPay(round(amountToPay))
                             .planPayDate(loan.getSignDate().plusMonths(i + 1))
                             .build()
             );
@@ -66,5 +69,13 @@ public class LoanReturnScheduleService {
         pdfService.generateLoanSchedulePdf(customer, loan);
         Path path = get(String.format(LOAN_SCHEDULE_ABSOLUTE_PATH, loanId));
         return new UrlResource(path.toUri());
+    }
+
+    public void saveReturnSchedule(List<LoanReturnSchedule> returnSchedules){
+        loanReturnScheduleRepository.saveAll(returnSchedules);
+    }
+
+    private Double round(Double amount){
+        return (double) ((int) Math.round(amount*100) / 100);
     }
 }
