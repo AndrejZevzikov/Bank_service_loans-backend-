@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,7 @@ public class Loan {
     private String description;
     @Enumerated(EnumType.STRING)
     private LoanStatus status;
+    private LocalDate signDate;
     private Double amount;
     private Long currencyId;
     private Integer monthToReturn;
